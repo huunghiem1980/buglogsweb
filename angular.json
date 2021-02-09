@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "bugLogsWeb"
+    }
+  },
+  "defaultProject": "bugLogsWeb",
+  "cli": {
+    "analytics": false
+  }
 }

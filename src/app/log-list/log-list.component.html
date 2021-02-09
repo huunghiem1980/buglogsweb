@@ -1,0 +1,14 @@
+<h2>Logs</h2>
+<div *ngFor="let log of logs" >
+    <div><span>id: </span>{{log.id}}</div>
+    <div><span>Ngày ghi nhận: </span>{{log.ngay_ghi_nhan}}</div>
+    <div><span>Người ghi nhận: </span>{{log.user_ghi_nhan}}</div>
+    <div><span>Môi trường: </span>{{log.moi_truong}}</div>
+    <div><span>Vị trí: </span>{{log.vi_tri}}</div>
+    <div><span>Mô tả: </span>{{log.mo_ta_log}}</div>
+    <div><span>Loại log: </span>{{log.loai_log}}</div>
+    <div><span>Trạng thái: </span>{{log.trang_thai_log}}</div>
+    <div><span>Dev thực hiện: </span>{{log.dev_thuc_hien}}</div>
+    <div><span>Ngày test lại: </span>{{log.ngay_test_lai}}</div>
+</div>
+
