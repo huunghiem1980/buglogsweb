@@ -1,14 +1,84 @@
-<h2>Logs</h2>
-<div *ngFor="let log of logs" >
-    <div><span>id: </span>{{log.id}}</div>
-    <div><span>Ngày ghi nhận: </span>{{log.ngay_ghi_nhan}}</div>
-    <div><span>Người ghi nhận: </span>{{log.user_ghi_nhan}}</div>
-    <div><span>Môi trường: </span>{{log.moi_truong}}</div>
-    <div><span>Vị trí: </span>{{log.vi_tri}}</div>
-    <div><span>Mô tả: </span>{{log.mo_ta_log}}</div>
-    <div><span>Loại log: </span>{{log.loai_log}}</div>
-    <div><span>Trạng thái: </span>{{log.trang_thai_log}}</div>
-    <div><span>Dev thực hiện: </span>{{log.dev_thuc_hien}}</div>
-    <div><span>Ngày test lại: </span>{{log.ngay_test_lai}}</div>
+<h2>{{selectedProject}}</h2>
+<!-- <select name="du_an" id="du_an" [(ngModel)]="selectedProject" (change)="onProjectChange()">
+    <option *ngFor="let p of projects" [ngValue]="p">{{p.ten_du_an}}</option>
+</select>
+<br> -->
+
+<!-- <button type=" button" class="btn btn-primary" (click)="resetForm()" data-backdrop="static" data-toggle="modal"
+    data-target="#update-modal">
+    Tạo mới
+</button> -->
+<br><br>
+<div *ngIf="logs && logs.length">
+
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Ngày ghi nhận</th>
+                <th>Người ghi nhận</th>
+                <th>Môi trường</th>
+                <th>Vị trí</th>
+                <th>Mô tả</th>
+                <th>Loại log</th>
+                <th>Trạng thái</th>
+                <th>Dev thực hiện</th>
+                <th>Ngày test lại</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let log of logs">
+                <td>
+                    <button type="button" class="btn btn-primary btn-block btn-sm" (click)="setLogDetails(log)"
+                        data-toggle="modal" data-target="#update-modal">
+                        {{log.id}}
+                    </button>
+                </td>
+                <td>{{log.ngay_ghi_nhan | date: 'dd/MM/yyyy'}}</td>
+                <td>{{log.user_ghi_nhan}}</td>
+                <td>{{log.moi_truong}}</td>
+                <td>{{log.vi_tri}}</td>
+                <td>{{log.mo_ta_log}}</td>
+                <td>{{log.loai_log_str}}</td>
+                <td>{{log.trang_thai_str}}</td>
+                <td>{{log.dev_thuc_hien}}</td>
+                <td>{{log.ngay_test_lai}}</td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete-modal"
+                        (click)="prepareDeleteLog(log)">&times;</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
+<!-- The Delete Modal -->
+<div class="modal fade" id="delete-modal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Xóa log!</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div *ngIf="deletedLog">
+                    <p [hidden]="returnedMessage">
+                        Bạn muốn xóa log với id = {{deletedLog.id}}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button [hidden]="returnedMessage" type="button" class="btn btn-danger"
+                    (click)="deleteLog()">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>

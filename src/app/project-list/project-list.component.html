@@ -1,0 +1,17 @@
+<h1 class="h2">Projects</h1>
+<div>
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">Tên dự án</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let project of projects" (click)="gotoLogs(project)">
+                <td>{{project.id}}</td>
+                <td>{{project.ten_du_an}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

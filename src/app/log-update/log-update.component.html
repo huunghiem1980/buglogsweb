@@ -1,0 +1,93 @@
+<div *ngIf="showLog">
+
+    <div class="modal-header">
+        <h4 class="modal-title">Nhập thông tin</h4>
+        <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form #logForm="ngForm" (ngSubmit)="saveLog()">
+            <!-- ID -->
+            <div class="form-group">
+                <label for="id">Id:</label>
+                <input type="number" class="form-control" id="id" required [(ngModel)]="showLog.id" name="id" disabled>
+            </div>
+
+
+            <div class="form-group">
+                <label for="ngay_ghi_nhan">ngay_ghi_nhan:</label>
+                <input type="date" class="form-control" placeholder="" id="ngay_ghi_nhan" required
+                    [value]="showLog.ngay_ghi_nhan | date:'yyyy-MM-dd'"
+                    (input)="showLog.ngay_ghi_nhan = $event.target.valueAsDate" name="ngay_ghi_nhan" />
+            </div>
+
+            <div class="form-group">
+                <label for="user_ghi_nhan">user_ghi_nhan:</label>
+                <input type="text" class="form-control" placeholder="" id="user_ghi_nhan" required
+                    [(ngModel)]="showLog.user_ghi_nhan" name="user_ghi_nhan" #user_ghi_nhan="ngModel">
+            </div>
+            <div [hidden]="user_ghi_nhan.valid||user_ghi_nhan.pristine" class="alert alert-danger">
+                Cần nhâp "User ghi nhận"
+            </div>
+
+            <div class="form-group">
+                <label for="moi_truong">moi_truong:</label>
+                <input type="text" class="form-control" placeholder="" id="moi_truong" required
+                    [(ngModel)]="showLog.moi_truong" name="moi_truong">
+            </div>
+
+            <div class="form-group">
+                <label for="vi_tri">vi_tri:</label>
+                <input type="text" class="form-control" placeholder="" id="vi_tri" required [(ngModel)]="showLog.vi_tri"
+                    name="vi_tri">
+            </div>
+
+            <div class="form-group">
+                <label for="mo_ta_log">mo_ta_log:</label>
+                <input type="text" class="form-control" placeholder="" id="mo_ta_log" required
+                    [(ngModel)]="showLog.mo_ta_log" name="mo_ta_log">
+            </div>
+
+            <div class="form-group">
+                <label for="loai_log">loai_log</label>
+                <select class="form-control" name="loai_log" id="loai_log" required [(ngModel)]="showLog.loai_log">
+                    <option *ngFor="let loai of loai_logs" [value]="loai.value">
+                        {{loai.label}}
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="trang_thai_log">trang_thai_log</label>
+                <select class="form-control" name="trang_thai_log" id="trang_thai_log" required
+                    [(ngModel)]="showLog.trang_thai_log">
+                    <option *ngFor="let trang_thai of trang_thai_logs" [value]="trang_thai.value">
+                        {{trang_thai.label}}
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="dev_thuc_hien">dev_thuc_hien:</label>
+                <input type="text" class="form-control" placeholder="" id="dev_thuc_hien" required
+                    [(ngModel)]="showLog.dev_thuc_hien" name="dev_thuc_hien">
+            </div>
+
+            <div class="form-group">
+                <label for="ngay_test_lai">ngay_test_lai:</label>
+                <input type="text" class="form-control" placeholder="" id="ngay_test_lai" required
+                    [(ngModel)]="showLog.ngay_test_lai" name="ngay_test_lai">
+            </div>
+
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+            <!-- <button type="button" class="btn btn-success" data-dismiss="modal">Cập nhật</button> -->
+            <button type="submit" class="btn btn-success" [disabled]="!logForm.form.valid">Cập
+                nhật</button>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
+    </div>
+
+</div>
