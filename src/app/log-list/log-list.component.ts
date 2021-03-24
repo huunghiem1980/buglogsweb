@@ -1,15 +1,15 @@
 //Angular
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+
+//3rd Parties
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 //Project
-import { Buglog, Project } from '../buglog';
-import { BuglogService } from "../buglog.service";
+import { Buglog } from '../buglog';
+import { BuglogService } from "../services/buglog.service";
 import { Message } from '../message';
-import { MessageService } from '../message.service';
-import {category, LOAI_LOG, TRANG_THAI_LOG} from '../category'
-import { ProjectService } from '../project.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MessageService } from '../services/message.service';
+import { category, LOAI_LOG, TRANG_THAI_LOG } from '../category';
 import { LogUpdateComponent } from '../log-update/log-update.component';
 
 
@@ -19,41 +19,35 @@ import { LogUpdateComponent } from '../log-update/log-update.component';
   styleUrls: ['./log-list.component.css'],
   providers: []
 })
-export class LogListComponent implements OnInit {
+export class LogListComponent implements OnInit,AfterViewInit {
   
   logs: Array<Buglog> = []; 
   deletedLog: Buglog;
-  returnedMessage: string;
+  // returnedMessage: string;
   selectedProject: string = '';
   
   loai_logs: category[];
-  trang_thai_logs: category[];
- 
+  trang_thai_logs: category[]; 
 
 
   constructor(private logService: BuglogService,
     private messageService: MessageService,
-    private route: ActivatedRoute,
     private modalService: NgbModal) {
   }
 
+  ngAfterViewInit() {
+    console.log("Loglist - ngAfterViewInit....");
+    this.initialize();
+  }
 
   ngOnInit(): void {
-    this.initialize();
+    console.log("Loglist - ngOnInit....");
+    // this.initialize();
   }
   
 
-  private initialize() {
-    // this.loai_logs = LOAI_LOG;
-    // this.trang_thai_logs = TRANG_THAI_LOG;
-
-    // Get selected project from active route
-    this.route.queryParams.subscribe(params => {
-      this.selectedProject = params.project;
-    });
-
+  private initialize() {    
     this.getAllLogs(this.selectedProject);
-    //this.getAllProjects();
   }
 
 
@@ -77,17 +71,22 @@ export class LogListComponent implements OnInit {
   }
 
 
-
   setLogDetails(log: Buglog) {
     const modalRef = this.modalService.open(LogUpdateComponent, { backdrop: 'static' })
     modalRef.componentInstance.showLog = log    
   }
 
 
-  prepareDeleteLog(log: Buglog) {
+  prepareDeleteLog(deleteModalContent: any, log: Buglog) {
     this.deletedLog = log;
-    this.returnedMessage = undefined;
-    
+
+    this.modalService.open(deleteModalContent).result.then(
+      (result) => {
+        this.deleteLog();
+      },
+      (reason) => {
+
+      });
   }
 
 
@@ -100,26 +99,14 @@ export class LogListComponent implements OnInit {
           return log.id != this.deletedLog.id;
         })
         
-        // set a showing message in delete modal
-        this.returnedMessage = message.message;
-
         // add the delete message to message app for showing
-        this.showSuccessToast(message.message);
+        this.messageService.showSuccessMesage(message.message);
       },
         (error) => {
           console.log(error);
           let errMsg = "Xóa lỗi ! Error = " + error;
-          this.showErrorToast(errMsg);
+          this.messageService.showErrorMesage(errMsg);
         });
   }
   
-
-  showSuccessToast(msg) {
-    this.messageService.show(msg, { classname: 'bg-success text-light', delay: 10000 });
-  }
-
-
-  showErrorToast(msg) {
-    this.messageService.show(msg, { classname: 'bg-danger text-light', delay: 10000 });
-  }
 }

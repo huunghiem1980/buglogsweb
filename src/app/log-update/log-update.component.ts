@@ -6,10 +6,10 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 //Project
 import { Buglog } from '../buglog';
-import { BuglogService } from '../buglog.service';
+import { BuglogService } from '../services/buglog.service';
 import { category, LOAI_LOG, TRANG_THAI_LOG } from '../category';
 import { Message } from '../message';
-import { MessageService } from '../message.service';
+import { MessageService } from '../services/message.service';
 
 @Component({
   selector: 'app-log-update',
@@ -47,9 +47,7 @@ export class LogUpdateComponent implements OnInit {
     else {
       console.log("Tao moi log");
       this.createLog();
-    }
-
-    this.activeModal.close();
+    }   
   }
   
 
@@ -61,41 +59,45 @@ export class LogUpdateComponent implements OnInit {
         this.showLog.trang_thai_str = TRANG_THAI_LOG.find(x => x.value == this.showLog.trang_thai_log).label;
         
         let msg: string = "Cập nhật thành công !!"
-        this.showSuccessToast(msg);
+        this.messageService.showSuccessMesage(msg);
+
+        this.activeModal.close();
       },
         (error) => {
           console.log(error);
           let errMsg = "Cập nhật lỗi ! Error = " + error;
-          this.showErrorToast(errMsg);
+          this.messageService.showErrorMesage(errMsg);
+
+          this.activeModal.close();
         });
   }
 
 
   createLog() {
-    console.log(this.showLog);
+    //console.log(this.showLog);
     this.logService.createLog(this.showLog)
       .subscribe((message: Message) => {
-        console.log(message);
+        //console.log(message);
         // this.logs.push(message.data[0]);
         this.showLog.loai_log_str = LOAI_LOG.find(x => x.value == this.showLog.loai_log).label;
         this.showLog.trang_thai_str = TRANG_THAI_LOG.find(x => x.value == this.showLog.trang_thai_log).label;
+        this.showLog.id = (<Buglog>message.data[0]).id;
+        
         let msg = "Tạo mới thành công !";
-        this.showSuccessToast(msg);
+        this.messageService.showSuccessMesage(msg);
+
+        // console.log("Da tao moi Log voi thong tin:");
+        // console.log(this.showLog);
+        this.activeModal.close(this.showLog);
       },
         (error) => {
           console.log(error);
           let errMsg = "Tạo mới thất bại !"
-          this.showErrorToast(errMsg);
+          this.messageService.showErrorMesage(errMsg);
+
+          this.activeModal.close();
         });
   }
   
 
-  showSuccessToast(msg) {
-    this.messageService.show(msg, { classname: 'bg-success text-light', delay: 10000 });
-  }
-
-
-  showErrorToast(msg) {
-    this.messageService.show(msg, { classname: 'bg-danger text-light', delay: 10000 });
-  }
 }

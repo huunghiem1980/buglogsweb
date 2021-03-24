@@ -5,7 +5,7 @@ import { NavigationExtras, Router } from '@angular/router';
 //Project
 import { Project } from '../buglog';
 import { Message } from '../message';
-import { ProjectService } from '../project.service';
+import { ProjectService } from '../services/project.service';
 
  
 
